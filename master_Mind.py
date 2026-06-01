@@ -5,8 +5,15 @@
 # 15-8-2024
 # Last mod by DevJan : added loop for replay
 print("MasterMind")
-
+import hashlib
 import random
+
+ADMIN_PASSWORD_HASH = "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9"
+ 
+def check_Admin_Password() -> bool:
+    """Ask for admin password and verify against the stored hash."""
+    pwd = input("Enter admin password: ")
+    return hashlib.sha256(pwd.encode()).hexdigest() == ADMIN_PASSWORD_HASH
 
 def generate_Code(length=4, digits=6):
     return [str(random.randint(1, digits)) for _ in range(length)]
@@ -44,7 +51,12 @@ def play_Mastermind():
             valid_Guess = len(guess) == 4 and all(c in "123456" for c in guess)
             if not valid_Guess:
                 print("Invalid input. Enter 4 digits, each from 1 to 6.")
-            show_Secret(secret_Code) if guess == "cheat" else False
+                if guess == "cheat":
+                    if check_Admin_Password():
+                        show_Secret(secret_Code) 
+                    else:
+                        print("Incorrect password. Access denied.")
+                    continue
 
         black, white = get_Feedback(secret_Code, guess)
         print(f"Black pegs (correct position): {black}, White pegs (wrong position): {white}")
