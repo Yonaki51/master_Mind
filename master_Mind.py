@@ -8,8 +8,11 @@ print("MasterMind")
 
 import random
 
-def generate_Code(length=4, digits=6, colors=6):
-    return [str(random.randint(1, digits)(1, colors)) for _ in range(length)]
+COLORS = ["red", "blue", "green", "yellow", "purple", "orange"]
+
+def generate_CodeOrColors(length=4, digits=6, COLORS=6):
+    return [str(random.randint(1, digits)) for c in range(length)]
+    return [str(random.choice(COLORS)) for c in range(length)]
 
 def get_Feedback(secret, guess):
     black_Pegs = sum(s == g for s, g in zip(secret, guess))
@@ -32,18 +35,17 @@ def show_Secret(mystery):
 
 def play_Mastermind():
     print("Welcome to Mastermind!")
-    print("Guess the 4-digit code. Each digit is from 1 to 6. You have 10 attempts.")
+    print("Guess the 4-digit code. Enter 4 digits (1-6) or 4 colors separated by spaces. You have 10 attempts.")
     secret_Code = generate_Code()
     attempts = 10
 
     for attempt in range(1, attempts + 1):
-        guess = ""
-        valid_Guess = False
-        while not valid_Guess:
-            guess = input(f"Attempt {attempt}: ").strip()
-            valid_Guess = len(guess) == 4 and all(c in "123456" for c in guess)
-            if not valid_Guess:
-                print("Invalid input. Enter 4 digits, each from 1 to 6.")
+        guess = None
+        while guess is None:
+            raw_guess = input(f"Attempt {attempt}: ").strip()
+            guess = parse_guess(raw_guess)
+            if guess is None:
+                print("Invalid input. Enter 4 digits (1-6) or 4 colors separated by spaces.")
 
         black, white = get_Feedback(secret_Code, guess)
         print(f"Black pegs (correct position): {black}, White pegs (wrong position): {white}")
