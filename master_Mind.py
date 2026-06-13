@@ -19,7 +19,7 @@ def generate_Code(length=4, digits=6):
     return [str(random.randint(1, digits)) for _ in range(length)]
 
 def get_Feedback(secret, guess):
-    black_Pegs = sum(s == g for s, g in zip(secret, guess))
+    black_Pegs = sum(s == g for s, g in zip(secret, guess)) 
     secret_Counts = {}
     guess_Counts = {}
     for s, g in zip(secret, guess):
