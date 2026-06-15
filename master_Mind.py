@@ -10,9 +10,11 @@ import random
 
 COLORS = ["red", "blue", "green", "yellow", "purple", "orange"]
 
-def generate_CodeOrColors(length=4, digits=6, COLORS=6):
-    return [str(random.randint(1, digits)) for c in range(length)]
-    return [str(random.choice(COLORS)) for c in range(length)]
+def generate_code(use_colors=False):
+    if use_colors:
+        return [random.choice(COLORS) for _ in range(4)]
+    else:
+        return [str(random.randint(1, 6)) for _ in range(4)]
 
 def get_Feedback(secret, guess):
     black_Pegs = sum(s == g for s, g in zip(secret, guess))
